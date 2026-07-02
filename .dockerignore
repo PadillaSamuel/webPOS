@@ -1,0 +1,17 @@
+node_modules
+README.md
+.git
+.gitgnore
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env
+.github
+github
+dist

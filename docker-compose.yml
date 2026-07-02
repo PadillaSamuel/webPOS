@@ -1,0 +1,37 @@
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - n8n
+    container_name: webPOS
+    environment:
+      VITE_SUPABASE_KEY: ${VITE_SUPABASE_KEY}
+      VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+      VITE_N8N_WEBHOOK_URL: ${VITE_N8N_WEBHOOK_URL:-http://localhost:5678/webhook/carrito}
+    ports:
+      - "8080:80"
+    restart: always
+  n8n:
+    image: n8nio/n8n:1.82.2
+    container_name: n8nPOS
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_HOST: ${N8N_HOST:-localhost}
+      N8N_PORT: 5678
+      N8N_PROTOCOL: ${N8N_PROTOCOL:-http}
+      WEBHOOK_URL: ${WEBHOOK_URL:-http://localhost:5678/}
+      N8N_CORS_ALLOW_ORIGIN: "*"
+      N8N_CORS_ALLOW_METHODS: GET,POST,OPTIONS,PUT,DELETE,PATCH
+      N8N_CORS_ALLOW_HEADERS: "*"
+      N8N_CORS_ALLOW_CREDENTIALS: "true"
+      GENERIC_TIMEZONE: ${GENERIC_TIMEZONE:-America/Bogota}
+    volumes:
+      - n8n_data:/home/node/.n8n
+    restart: always
+
+volumes:
+  n8n_data:
+    external: false
